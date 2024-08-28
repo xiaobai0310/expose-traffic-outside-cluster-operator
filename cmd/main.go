@@ -43,6 +43,7 @@ var (
 )
 
 func init() {
+	// 将k8s内置资源对象的schema和自定义资源对象的schema注册到scheme中
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(exposetrafficoutsideclusterv1alpha1.AddToScheme(scheme))
@@ -66,6 +67,7 @@ func main() {
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
+	// 创建manager，会将对应的schema、metrics、health probe、leader election等信息传递给manager
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
 		Metrics:                metricsserver.Options{BindAddress: metricsAddr},
@@ -89,6 +91,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// 将自定义的reconciler注册到manager中
 	if err = (&controller.ExposeAppReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
@@ -98,6 +101,7 @@ func main() {
 	}
 	//+kubebuilder:scaffold:builder
 
+	// 健康检查相关
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {
 		setupLog.Error(err, "unable to set up health check")
 		os.Exit(1)
@@ -107,6 +111,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// 准备工作做完以后，启动manager，最终manager启动是调用了controller-runtime
 	setupLog.Info("starting manager")
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		setupLog.Error(err, "problem running manager")

@@ -29,7 +29,7 @@ type ExposeAppSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Foo is an example field of ExposeApp. Edit exposeapp_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	//Foo string `json:"foo,omitempty"`
 }
 
 // ExposeAppStatus defines the observed state of ExposeApp
