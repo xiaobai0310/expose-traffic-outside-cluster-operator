@@ -1,0 +1,12 @@
+apiVersion: expose-traffic-outside-cluster.bailu.io/v1alpha1
+kind: ExposeApp
+metadata:
+  labels:
+    app.kubernetes.io/name: exposeapp
+    app.kubernetes.io/instance: exposeapp-sample
+    app.kubernetes.io/part-of: expose-traffic-outside-cluster-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: expose-traffic-outside-cluster-operator
+  name: exposeapp-sample
+spec:
+  # TODO(user): Add fields here

@@ -1,0 +1,27 @@
+# permissions for end users to view exposeapps.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: exposeapp-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: expose-traffic-outside-cluster-operator
+    app.kubernetes.io/part-of: expose-traffic-outside-cluster-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: exposeapp-viewer-role
+rules:
+- apiGroups:
+  - expose-traffic-outside-cluster.bailu.io
+  resources:
+  - exposeapps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - expose-traffic-outside-cluster.bailu.io
+  resources:
+  - exposeapps/status
+  verbs:
+  - get

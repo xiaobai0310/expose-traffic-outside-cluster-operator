@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - expose-traffic-outside-cluster.bailu.io
+  resources:
+  - exposeapps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - expose-traffic-outside-cluster.bailu.io
+  resources:
+  - exposeapps/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - expose-traffic-outside-cluster.bailu.io
+  resources:
+  - exposeapps/status
+  verbs:
+  - get
+  - patch
+  - update

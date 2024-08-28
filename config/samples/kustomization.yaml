@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- expose-traffic-outside-cluster_v1alpha1_exposeapp.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples
