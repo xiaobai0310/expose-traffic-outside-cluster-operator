@@ -18,13 +18,14 @@ package controller
 
 import (
 	"context"
-
+	exposetrafficoutsideclusterv1alpha1 "github.com/xiaobai0310/expose-traffic-outside-cluster-operator/api/v1alpha1"
+	appv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
-
-	exposetrafficoutsideclusterv1alpha1 "github.com/xiaobai0310/expose-traffic-outside-cluster-operator/api/v1alpha1"
 )
 
 // ExposeAppReconciler reconciles a ExposeApp object
@@ -47,10 +48,42 @@ type ExposeAppReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.0/pkg/reconcile
 func (r *ExposeAppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
 	// TODO(user): your logic here
 
+	app := &exposetrafficoutsideclusterv1alpha1.ExposeApp{}
+	// get app object, if not found, ignore
+	if err := r.Get(ctx, req.NamespacedName, app); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	// handle the app object
+	deploy := &appv1.Deployment{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      app.Name,
+			Namespace: app.Namespace,
+		},
+		Spec: appv1.DeploymentSpec{
+			Replicas: &app.Spec.Replicas,
+			Selector: &metav1.LabelSelector{
+				// todo: add label
+			},
+			Template: corev1.PodTemplateSpec{
+				ObjectMeta: metav1.ObjectMeta{
+					// todo: add label
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{
+						{
+							Name:  app.Name,
+							Image: app.Spec.Image,
+						},
+					},
+				},
+			},
+		},
+	}
 	return ctrl.Result{}, nil
 }
 

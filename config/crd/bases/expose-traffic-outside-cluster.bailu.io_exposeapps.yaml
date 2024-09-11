@@ -34,10 +34,26 @@ spec:
           spec:
             description: ExposeAppSpec defines the desired state of ExposeApp
             properties:
-              foo:
-                description: Foo is an example field of ExposeApp. Edit exposeapp_types.go
-                  to remove/update
+              enable-ingress:
+                description: 'Important: Run "make manifests" to regenerate code after
+                  modifying this file EnableIngress is not required, so we use omitempty
+                  EnableIngress is a boolean value to enable or enable the ingress'
+                type: boolean
+              enable-service:
+                description: EnableService is a boolean value to enable or enable
+                  the service
+                type: boolean
+              image:
+                description: Image is the image of the application
                 type: string
+              replicas:
+                description: Replicas is the number of replicas of the application
+                format: int32
+                type: integer
+            required:
+            - enable-service
+            - image
+            - replicas
             type: object
           status:
             description: ExposeAppStatus defines the observed state of ExposeApp

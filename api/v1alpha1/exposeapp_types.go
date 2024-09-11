@@ -30,6 +30,17 @@ type ExposeAppSpec struct {
 
 	// Foo is an example field of ExposeApp. Edit exposeapp_types.go to remove/update
 	//Foo string `json:"foo,omitempty"`
+
+	// Important: Run "make manifests" to regenerate code after modifying this file
+	// EnableIngress is not required, so we use omitempty
+	// EnableIngress is a boolean value to enable or enable the ingress
+	EnableIngress bool `json:"enable-ingress,omitempty"`
+	// EnableService is a boolean value to enable or enable the service
+	EnableService bool `json:"enable-service"`
+	// Replicas is the number of replicas of the application
+	Replicas int32 `json:"replicas"`
+	// Image is the image of the application
+	Image string `json:"image"`
 }
 
 // ExposeAppStatus defines the observed state of ExposeApp
