@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-ingress
+  labels:
+    app: sample
+spec:
+  rules:
+  - host: sample.local80
+    http:
+      paths:
+      - path: /web80
+        pathType: Prefix
+        backend:
+          service:
+            name: sample-service
+            port:
+              number: 80
+      - path: /web8080
+        pathType: Prefix
+        backend:
+          service:
+            name: sample-service
+            port:
+              number: 8080
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: multiport-ingressroute
+  namespace: default
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`example.com`) && PathPrefix(`/web`)
+      kind: Rule
+      services:
+        - name: multiport-service
+          port: 80
+      middlewares:
+        - name: strip-web-prefix
+      priority: 10
+    - match: Host(`example.com`) && PathPrefix(`/api`)
+      kind: Rule
+      services:
+        - name: multiport-service
+          port: 8080
+      middlewares:
+        - name: strip-api-prefix
+      priority: 20
+  middlewares:
+    - name: strip-web-prefix
+      stripPrefix:
+        prefixes:
+          - /web
+    - name: strip-api-prefix
+      stripPrefix:
+        prefixes:
+          - /api
