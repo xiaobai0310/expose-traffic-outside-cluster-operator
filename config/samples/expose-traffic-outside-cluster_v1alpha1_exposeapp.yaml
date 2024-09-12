@@ -10,3 +10,34 @@ metadata:
   name: exposeapp-sample
 spec:
   # TODO(user): Add fields here
+  image: "nginx:latest"
+  replicas: 2
+  enableService: true
+  enableIngress: true
+  ports:
+  - name: http1
+    port: 80
+    containerPort: 80
+    protocol: TCP
+  - name: http1
+    port: 80
+    containerPort: 80
+    protocol: TCP
+  servicePorts:
+  - name: httpService1
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: httpService2
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  IngressPorts:
+    - name: httpIngress1
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: httpIngress2
+      port: 80
+      targetPort: 80
+      protocol: TCP

@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
+	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -34,13 +36,19 @@ type ExposeAppSpec struct {
 	// Important: Run "make manifests" to regenerate code after modifying this file
 	// EnableIngress is not required, so we use omitempty
 	// EnableIngress is a boolean value to enable or enable the ingress
-	EnableIngress bool `json:"enable-ingress,omitempty"`
+	EnableIngress bool `json:"enableIngress,omitempty"`
 	// EnableService is a boolean value to enable or enable the service
-	EnableService bool `json:"enable-service"`
+	EnableService bool `json:"enableService"`
 	// Replicas is the number of replicas of the application
 	Replicas int32 `json:"replicas"`
 	// Image is the image of the application
 	Image string `json:"image"`
+	// ExposeAppPort is the port of the application
+	Ports []corev1.ContainerPort `json:"ports"`
+	// ServicePorts is the port of the service
+	ServicePorts []corev1.ServicePort `json:"servicePorts"`
+	// IngressPorts is the port of the ingress
+	IngressPorts []netv1.IngressRule `json:"ingressPorts"`
 }
 
 // ExposeAppStatus defines the observed state of ExposeApp

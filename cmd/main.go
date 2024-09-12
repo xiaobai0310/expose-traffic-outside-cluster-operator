@@ -18,7 +18,9 @@ package main
 
 import (
 	"flag"
+	"k8s.io/klog/v2"
 	"os"
+	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -29,7 +31,6 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
-	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	exposetrafficoutsideclusterv1alpha1 "github.com/xiaobai0310/expose-traffic-outside-cluster-operator/api/v1alpha1"
@@ -66,6 +67,9 @@ func main() {
 	flag.Parse()
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
+
+	klog.InitFlags(nil)
+	defer klog.Flush()
 
 	// 创建manager，会将对应的schema、metrics、health probe、leader election等信息传递给manager
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
